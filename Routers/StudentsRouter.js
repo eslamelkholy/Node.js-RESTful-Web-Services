@@ -23,8 +23,7 @@ StudentRouter.post("/add",(request,response)=>{
         return response.send(err);
     });
 });
-
-// MiddleWare Inject In The Router To Find Student By ID
+// MiddleWare Injected In The Router To Find Student By ID
 StudentRouter.use("/:id", (request, response, next) => {
     studentSchema.findById(request.params.id, (error, student)=>{
         if(error)
@@ -37,31 +36,42 @@ StudentRouter.use("/:id", (request, response, next) => {
         return response.sendStatus(404)
     });
 });
-
 // Get Student By ID
 StudentRouter.get("/:id",(request,response)=> response.json(request.student));
 
 // Update Student Details 
 StudentRouter.put("/:id",(request,response)=>{
-    student = request.student
+    const { student } = request;
     student.Name = request.body.Name;
     student.Department = request.body.Department;
     student.Email = request.body.Email;
     student.Courses = request.body.Courses;
     student.Department = request.body.Department
-    student.save();
-    return response.json(student);
+    student.save((err) =>{
+        if(err)
+            return response.send(err);
+        return response.json(student);
+    });
 });
-
 // Update Specific Information
 StudentRouter.patch("/:id",(request,response)=>{
-    studentSchema.deleteOne({_id:request.params.id},(error)=>{
-        if(!error)
-            return response.json({data:"deleted"})
-        return response.send(error);
-    })
+    const { student } = request;
+    if(request.body._id)
+        delete request.body._id;
+    Object.entries(request.body).forEach((item) => {
+        console.log(item);
+        const key = item[0];
+        const value = item[1];
+        student[key] = value;
+    });
+    student.save((err) =>{
+        if(err)
+            return response.send(err);
+        return response.json(student);
+    });
+
 });
-StudentRouter.get("/:id",(request,response)=>{
+StudentRouter.delete("/:id",(request,response)=>{
     studentSchema.deleteOne({_id:request.params.id},(error)=>{
         if(!error)
             return response.json({data:"deleted"})
