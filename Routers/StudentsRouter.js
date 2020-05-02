@@ -1,28 +1,18 @@
 let express=require("express");
 mongoose=require("mongoose");
-
+const studentsController = require("../controllers/studentsController");
 let StudentRouter=express.Router();
 path=require("path");
 require("../Models/StudentModel");
 let studentSchema=mongoose.model("Students");
+const controller = studentsController(studentSchema);
 
 // List All Student Data
-StudentRouter.get("/list",(request,response)=>{
-    studentSchema.find({}).populate({path :"Courses Department"}).then((speakers) =>{
-        return response.json(speakers);
-    }).catch((err) =>{
-        response.send(err);
-    });
-});
+StudentRouter.get("/list", controller.get);
+
 // Add New Student
-StudentRouter.post("/add",(request,response)=>{
-    let student=new studentSchema(request.body);
-    student.save((err)=>{
-        if(!err)
-            return response.json(student);
-        return response.send(err);
-    });
-});
+StudentRouter.post("/add", controller.post);
+
 // MiddleWare Injected In The Router To Find Student By ID
 StudentRouter.use("/:id", (request, response, next) => {
     studentSchema.findById(request.params.id, (error, student)=>{
@@ -36,6 +26,7 @@ StudentRouter.use("/:id", (request, response, next) => {
         return response.sendStatus(404)
     });
 });
+
 // Get Student By ID
 StudentRouter.get("/:id",(request,response)=> response.json(request.student));
 
@@ -53,6 +44,7 @@ StudentRouter.put("/:id",(request,response)=>{
         return response.json(student);
     });
 });
+
 // Update Specific Information
 StudentRouter.patch("/:id",(request,response)=>{
     const { student } = request;
@@ -71,6 +63,8 @@ StudentRouter.patch("/:id",(request,response)=>{
     });
 
 });
+
+// Delete Student
 StudentRouter.delete("/:id",(request,response)=>{
     request.student.remove((err) => {
         if(err)
