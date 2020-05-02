@@ -22,7 +22,7 @@ function studentController(studentSchema)
 }
 module.exports = studentController;
 
-// Short Describtion what this Controller Do
+// Short Description About what this Controller Do
 /*
     1- it Takes A Model Called StudentSchema
     Which Were Injected In The Routers
