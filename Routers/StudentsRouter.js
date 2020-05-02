@@ -72,10 +72,10 @@ StudentRouter.patch("/:id",(request,response)=>{
 
 });
 StudentRouter.delete("/:id",(request,response)=>{
-    studentSchema.deleteOne({_id:request.params.id},(error)=>{
-        if(!error)
-            return response.json({data:"deleted"})
-        return response.send(error);
-    })
+    request.student.remove((err) => {
+        if(err)
+            return response.send(err);
+        return response.sendStatus(204);
+    });
 });
 module.exports=StudentRouter;
