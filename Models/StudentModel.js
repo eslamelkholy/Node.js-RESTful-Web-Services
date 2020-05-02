@@ -1,6 +1,6 @@
-let mongoose=require("mongoose");
+const mongoose=require("mongoose");
 
-let studentSchema=new mongoose.Schema({
+const studentSchema=new mongoose.Schema({
     _id:Number,
     Name:{ type: String},
     Email:{ type : String},
@@ -12,4 +12,4 @@ let studentSchema=new mongoose.Schema({
 });
 
 //mapping
-mongoose.model("Students",studentSchema);
+module.exports =  mongoose.model("Students",studentSchema);

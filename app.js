@@ -8,14 +8,18 @@ var port = process.env.PORT || 8000;
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-// Routers
-StudentRouter=require("./Routers/StudentsRouter");
+
+// Models
+const studentSchema = require("./Models/StudentModel");
+
+// Routers & Inject The Models
+StudentRouter=require("./Routers/StudentsRouter")(studentSchema);
 DepartmentRouter=require("./Routers/DepartmentsRouter");
 CourseRouter = require("./Routers/CoursesRouter");
 
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  studentSchema.find({}).then((data) => res.send(data))
 });
 
 app.use("/student",StudentRouter);
