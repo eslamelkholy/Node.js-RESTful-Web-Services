@@ -61,8 +61,7 @@ function getJsonStudents(students, request){
 }
 // Handle Student Data
 function putStudentData(request){
-    if(request.body._id)
-        delete request.body._id;
+    request = filterStudentData(request);
     const { student } = request;
     student.Name = request.body.Name;
     student.Department = request.body.Department;
@@ -73,15 +72,21 @@ function putStudentData(request){
 }
 // Handle Patch Student Data
 function patchStudentData(request){
+    request = filterStudentData(request);
     const { student } = request;
-    if(request.body._id)
-        delete request.body._id;
     Object.entries(request.body).forEach((item) => {
         const key = item[0];
         const value = item[1];
         student[key] = value;
     });
     return student;
+}
+// Filter Student Data
+function filterStudentData(request)
+{
+    if(request.body._id)
+        delete request.body._id;
+    return request;
 }
 module.exports = studentController;
 
