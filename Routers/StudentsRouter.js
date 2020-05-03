@@ -27,13 +27,7 @@ function routes(studentSchema)
     });
     StudentRouter.route("/:id")
     // Get Student By ID
-    .get((request,response)=> {
-        const returnStudent = request.student.toJSON();
-        returnStudent.links = {};
-        const Name = request.student.Name;
-        returnStudent.links.FilterByThisName = `http://${request.headers.host}/student/?Name=${Name}`;
-        response.json(returnStudent);
-    })
+    .get((request,response)=> response.json(getStudent(request)))
     // Update Student Details 
     .put((request,response)=>{
         const { student } = request;
@@ -75,6 +69,15 @@ function routes(studentSchema)
     });
 
     return StudentRouter;
+}
+// Solve the Request and Returns Student 
+function getStudent(request)
+{
+    const returnStudent = request.student.toJSON();
+    returnStudent.links = {};
+    const Name = request.student.Name;
+    returnStudent.links.FilterByThisName = `http://${request.headers.host}/student/?Name=${Name}`;
+    return returnStudent;
 }
 
 module.exports = routes;

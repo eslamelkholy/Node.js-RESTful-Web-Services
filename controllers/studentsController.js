@@ -13,18 +13,23 @@ function studentController(studentSchema)
     }
     function get(request, response){
         studentSchema.find({}).populate({path :"Courses Department"}).then((students) =>{
-                const returnStudents = students.map((student) =>{
-                const newStudent = student.toJSON();
-                newStudent.links = {};
-                newStudent.links.self = `http://${request.headers.host}/student/${student._id}`;
-                return newStudent;
-            });
-            return response.json(returnStudents);
+            return response.json(getStudents(students, request));
         }).catch((err) =>{
             return response.send(err);
         });
     }
     return {post, get};
+}
+
+// Get All Students
+function getStudents(students, request){
+    const returnStudents = students.map((student) =>{
+        const newStudent = student.toJSON();
+        newStudent.links = {};
+        newStudent.links.self = `http://${request.headers.host}/student/${newStudent._id}`;
+        return newStudent;
+    });
+    return returnStudents;
 }
 module.exports = studentController;
 
