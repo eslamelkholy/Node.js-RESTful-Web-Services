@@ -22,12 +22,7 @@ function studentController(studentSchema)
     }
     // Update Student Data
     function put(request, response){
-        const { student } = request;
-        student.Name = request.body.Name;
-        student.Department = request.body.Department;
-        student.Email = request.body.Email;
-        student.Courses = request.body.Courses;
-        student.Department = request.body.Department
+        student = putStudentData(request);
         student.save((err) =>{
             if(err)
                 return response.send(err);
@@ -36,14 +31,7 @@ function studentController(studentSchema)
     }
     // Update specified Information about Student
     function patch(request, response){
-        const { student } = request;
-        if(request.body._id)
-            delete request.body._id;
-        Object.entries(request.body).forEach((item) => {
-            const key = item[0];
-            const value = item[1];
-            student[key] = value;
-        });
+        student = patchStudentData(request);
         student.save((err) =>{
             if(err)
                 return response.send(err);
@@ -70,6 +58,30 @@ function getJsonStudents(students, request){
         return newStudent;
     });
     return returnStudents;
+}
+// Handle Student Data
+function putStudentData(request){
+    if(request.body._id)
+        delete request.body._id;
+    const { student } = request;
+    student.Name = request.body.Name;
+    student.Department = request.body.Department;
+    student.Email = request.body.Email;
+    student.Courses = request.body.Courses;
+    student.Department = request.body.Department
+    return student;
+}
+// Handle Patch Student Data
+function patchStudentData(request){
+    const { student } = request;
+    if(request.body._id)
+        delete request.body._id;
+    Object.entries(request.body).forEach((item) => {
+        const key = item[0];
+        const value = item[1];
+        student[key] = value;
+    });
+    return student;
 }
 module.exports = studentController;
 

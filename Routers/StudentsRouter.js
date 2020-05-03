@@ -8,9 +8,7 @@ function routes(studentSchema)
     const StudentRouter=express.Router();
     const controller = studentsController(studentSchema);
     
-    // List All Student Data
     StudentRouter.route("/list").get(controller.get);
-    // Add New Student
     StudentRouter.route("/add").post(controller.post);
     // MiddleWare Injected In The Router To Find Student By ID
     StudentRouter.use("/:id", (request, response, next) => {
@@ -26,7 +24,6 @@ function routes(studentSchema)
         });
     });
     StudentRouter.route("/:id")
-    // Get Student By ID
     .get((request,response)=> response.json(getStudent(request)))
     .put(controller.put)
     .patch(controller.patch)
