@@ -2,7 +2,7 @@ const should = require("should");
 const sinon = require("sinon");
 const studentsController = require("../controllers/studentsController");
 
-describe("Book Controller Tests: ",() => {
+describe("Student Controller Tests: ",() => {
     describe("Post" ,() =>{
         it("Should not allow to add Empty Name ", ()=>{
             const studentSchema = function(student){
@@ -10,7 +10,7 @@ describe("Book Controller Tests: ",() => {
             }
             const request = {
                 body : {
-                    EMail: "EslamElkholy@gmail.com"
+                    Email: "EslamElkholy@gmail.com",
                 }
             }
             const response = {

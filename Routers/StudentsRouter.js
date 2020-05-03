@@ -9,7 +9,7 @@ function routes(studentSchema)
     const controller = studentsController(studentSchema);
     
     // List All Student Data
-    StudentRouter.route("/list").get(controller.get);
+    StudentRouter.route("").get(controller.get);
     // Add New Student
     StudentRouter.route("/add").post(controller.post);
     // MiddleWare Injected In The Router To Find Student By ID
