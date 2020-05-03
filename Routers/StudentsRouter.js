@@ -9,7 +9,7 @@ function routes(studentSchema)
     const controller = studentsController(studentSchema);
     
     // List All Student Data
-    StudentRouter.route("").get(controller.get);
+    StudentRouter.route("/list").get(controller.get);
     // Add New Student
     StudentRouter.route("/add").post(controller.post);
     // MiddleWare Injected In The Router To Find Student By ID
@@ -28,48 +28,13 @@ function routes(studentSchema)
     StudentRouter.route("/:id")
     // Get Student By ID
     .get((request,response)=> response.json(getStudent(request)))
-    // Update Student Details 
-    .put((request,response)=>{
-        const { student } = request;
-        student.Name = request.body.Name;
-        student.Department = request.body.Department;
-        student.Email = request.body.Email;
-        student.Courses = request.body.Courses;
-        student.Department = request.body.Department
-        student.save((err) =>{
-            if(err)
-                return response.send(err);
-            return response.json(student);
-        });
-    })
-    // Update Specific Information
-    .patch((request,response)=>{
-        const { student } = request;
-        if(request.body._id)
-            delete request.body._id;
-        Object.entries(request.body).forEach((item) => {
-            const key = item[0];
-            const value = item[1];
-            student[key] = value;
-        });
-        student.save((err) =>{
-            if(err)
-                return response.send(err);
-            return response.json(student);
-        });
-    
-    })
-    // Delete Student By ID
-    .delete((request,response)=>{
-        request.student.remove((err) => {
-            if(err)
-                return response.send(err);
-            return response.sendStatus(204);
-        });
-    });
+    .put(controller.put)
+    .patch(controller.patch)
+    .delete(controller.deleteStudent);
 
     return StudentRouter;
 }
+
 // Solve the Request and Returns Student 
 function getStudent(request)
 {
