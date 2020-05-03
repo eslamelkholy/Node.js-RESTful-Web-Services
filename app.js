@@ -3,15 +3,10 @@ const mongoose = require("mongoose");
 const bodyParser= require("body-parser");
 const app = express();
 
-// For Test Cases
 // process.env.ENV = "Test";
-if(process.env.ENV === 'Test')
-{
+if(process.env.ENV === 'Test'){
   const db = mongoose.connect("mongodb://localhost:27017/itiDB_Test");
-}
-  
-else
-{
+}else{
   const db = mongoose.connect("mongodb://localhost:27017/itiDB");
 }
 
