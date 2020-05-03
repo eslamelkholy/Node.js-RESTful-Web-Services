@@ -12,8 +12,14 @@ function studentController(studentSchema)
         return response.json(student);
     }
     function get(request, response){
-        studentSchema.find({}).populate({path :"Courses Department"}).then((speakers) =>{
-            return response.json(speakers);
+        studentSchema.find({}).populate({path :"Courses Department"}).then((students) =>{
+                const returnStudents = students.map((student) =>{
+                const newStudent = student.toJSON();
+                newStudent.links = {};
+                newStudent.links.self = `http://${request.headers.host}/student/${student._id}`;
+                return newStudent;
+            });
+            return response.json(returnStudents);
         }).catch((err) =>{
             return response.send(err);
         });

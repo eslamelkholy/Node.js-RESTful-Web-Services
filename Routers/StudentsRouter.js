@@ -27,7 +27,13 @@ function routes(studentSchema)
     });
     StudentRouter.route("/:id")
     // Get Student By ID
-    .get((request,response)=> response.json(request.student))
+    .get((request,response)=> {
+        const returnStudent = request.student.toJSON();
+        returnStudent.links = {};
+        const Name = request.student.Name;
+        returnStudent.links.FilterByThisName = `http://${request.headers.host}/student/?Name=${Name}`;
+        response.json(returnStudent);
+    })
     // Update Student Details 
     .put((request,response)=>{
         const { student } = request;
