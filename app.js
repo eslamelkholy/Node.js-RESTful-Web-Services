@@ -20,10 +20,11 @@ const userSchema = require("./Models/UserModel");
 
 // Routers & Inject The Models
 StudentRouter=require("./Routers/StudentsRouter")(studentSchema);
-UserRouter = require("./Routers/UserRouter")(userSchema);
+UserRouter = require("./Routers/UsersRouter")(userSchema);
 
 app.use("/user", UserRouter);
 app.use("/student",StudentRouter);
+
 app.use((request,response)=>{
     response.send("Not Found");
 });
