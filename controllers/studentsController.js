@@ -1,16 +1,16 @@
 function studentController(studentSchema)
 {
     // Add New Student
-    function post(request, response){
-        const student=new studentSchema(request.body);
-        if(!request.body.Name)
-        {
+    post= async(request, response)=>{
+        try{
+            const student=new studentSchema(request.body);
+            await student.save();
+            response.status(201);
+            return response.json(student);
+        }catch{
             response.status(400);
-            return response.send("Name is Required");
+            return response.send("Please Fill Required Fields");
         }
-        student.save();
-        response.status(201);
-        return response.json(student);
     }
     // List all Students
     function get(request, response){
@@ -21,30 +21,33 @@ function studentController(studentSchema)
         });
     }
     // Update Student Data
-    function put(request, response){
-        student = putStudentData(request);
-        student.save((err) =>{
-            if(err)
-                return response.send(err);
+    async function put(request, response){
+        try{
+            const student = putStudentData(request);
+            await student.save();
             return response.json(student);
-        });
+        }catch(err){
+            return response.send(err);
+        }
     }
     // Update specified Information about Student
-    function patch(request, response){
-        student = patchStudentData(request);
-        student.save((err) =>{
-            if(err)
-                return response.send(err);
-            return response.json(student);
-        });
+    async function patch(request, response){
+        try{
+            const student = patchStudentData(request);
+            await student.save();
+            return response.json({success: true});
+        }catch{
+            return response.status(404).json({success: false});
+        }
     }
     // Delete Student
-    function deleteStudent(request, response){
-        request.student.remove((err) => {
-            if(err)
-                return response.send(err);
-            return response.sendStatus(204);
-        });
+    async function deleteStudent(request, response){
+        try{
+            request.student.remove();
+            return response.json({success: true});
+        }catch{
+            return response.status(404).json({success: false});
+        }
     }
     return {post, get, put, patch, deleteStudent};
 }

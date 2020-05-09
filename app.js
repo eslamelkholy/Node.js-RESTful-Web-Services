@@ -14,23 +14,16 @@ var port = process.env.PORT || 8000;
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-
 // Models
 const studentSchema = require("./Models/StudentModel");
+const userSchema = require("./Models/UserModel");
 
 // Routers & Inject The Models
 StudentRouter=require("./Routers/StudentsRouter")(studentSchema);
-DepartmentRouter=require("./Routers/DepartmentsRouter");
-CourseRouter = require("./Routers/CoursesRouter");
+UserRouter = require("./Routers/UserRouter")(userSchema);
 
-
-app.get("/", (req, res) => {
-  studentSchema.find({}).then((data) => res.send(data))
-});
-
+app.use("/user", UserRouter);
 app.use("/student",StudentRouter);
-app.use("/Departments",DepartmentRouter);
-app.use("/Courses",CourseRouter);
 app.use((request,response)=>{
     response.send("Not Found");
 });
