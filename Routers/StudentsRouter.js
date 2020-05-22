@@ -1,6 +1,7 @@
 const express=require("express");
 
 const studentsController = require("../controllers/studentsController");
+const { check } = require("express-validator");
 
 // Router Where StudentModel Were Injected in It in App.js
 function routes(studentSchema)
@@ -9,7 +10,12 @@ function routes(studentSchema)
     const controller = studentsController(studentSchema);
     
     StudentRouter.route("/list").get(controller.get);
-    StudentRouter.route("/add").post(controller.post);
+    StudentRouter.route("", ).post([
+        check('Email', 'Email is Required').notEmpty(),
+        check('Email', 'Must be a Valid Email').isEmail(),
+        check('Name', 'Name is Required').notEmpty()
+
+    ],controller.post);
     // MiddleWare Injected In The Router To Find Student By ID
     StudentRouter.use("/:id", (request, response, next) => {
         studentSchema.findById(request.params.id, (error, student)=>{

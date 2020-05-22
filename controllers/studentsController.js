@@ -1,8 +1,15 @@
+const { validationResult } = require("express-validator");
 function studentController(studentSchema)
 {
     // Add New Student
     post= async(request, response)=>{
         try{
+            const erros = validationResult(request);
+            if(!erros.isEmpty()){
+                console.log(erros)
+                response.status(422);
+                return response.json({errors: erros.array()})
+            }
             const student=new studentSchema(request.body);
             await student.save();
             response.status(201);

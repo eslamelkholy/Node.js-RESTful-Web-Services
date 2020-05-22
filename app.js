@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser= require("body-parser");
 const app = express();
 
-// process.env.ENV = "Test";
+process.env.ENV = "Test";
 if(process.env.ENV === 'Test'){
   const db = mongoose.connect("mongodb://localhost:27017/itiDB_Test");
 }else{
@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
 // Models
+require("./Models/CourseModel");
+require("./Models/DepartmentModel");
 const studentSchema = require("./Models/StudentModel");
 const userSchema = require("./Models/UserModel");
 
