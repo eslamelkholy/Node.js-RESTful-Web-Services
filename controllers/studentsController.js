@@ -6,7 +6,6 @@ function studentController(studentSchema)
         try{
             const erros = validationResult(request);
             if(!erros.isEmpty()){
-                console.log(erros)
                 response.status(422);
                 return response.json({errors: erros.array()})
             }
@@ -22,6 +21,7 @@ function studentController(studentSchema)
     // List all Students
     function get(request, response){
         studentSchema.find({}).populate({path :"Courses Department"}).then((students) =>{
+            response.status(200);
             return response.json(getJsonStudents(students, request));
         }).catch((err) =>{
             return response.send(err);
@@ -32,9 +32,11 @@ function studentController(studentSchema)
         try{
             const student = putStudentData(request);
             await student.save();
+            response.status(204)
             return response.json(student);
         }catch(err){
-            return response.send(err);
+            response.status(404)
+            return response.json({success: false});
         }
     }
     // Update specified Information about Student
@@ -42,15 +44,18 @@ function studentController(studentSchema)
         try{
             const student = patchStudentData(request);
             await student.save();
-            return response.json({success: true});
+            response.status(204)
+            return response.json(student);
         }catch{
-            return response.status(404).json({success: false});
+            response.status(404)
+            return response.json({success: false});
         }
     }
     // Delete Student
     async function deleteStudent(request, response){
         try{
             request.student.remove();
+            response.status(200)
             return response.json({success: true});
         }catch{
             return response.status(404).json({success: false});
